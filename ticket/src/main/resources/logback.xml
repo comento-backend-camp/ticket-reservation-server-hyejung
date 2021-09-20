@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PATTERN" value = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <!-- appender : log의 형태 설정, log 메세지가 출력될 대상(console/file)결정 -->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/ticket-reservation-server.log</file>
+        <rollingPolicy class = "ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 일자별 로그파일 생성 -->
+            <fileNamePattern>logs/ticket-reservation-server-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 최대 보관주기. 30일 이상된 파일은 자동으로 제거 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- INFO 이상 level 출력 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <logger name="org.springframework" level="warn">
+        <appender-ref ref = "ROLLING_FILE"/>
+    </logger>
+</configuration>
