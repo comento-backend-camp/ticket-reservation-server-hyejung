@@ -21,10 +21,10 @@ public class User{
     @Column(nullable = true)
     private String email;
 
-    @Column()
+    @Column(name="create_at")
     @CreationTimestamp //Entity가 생성되어 저장될 때 시간이 자동 저장
     @Temporal(TemporalType.TIMESTAMP)
-    private Date create_at;
+    private Date createAt;
 
     public User(){}
 
@@ -32,6 +32,6 @@ public class User{
     public User(long id, String email, Date create_at) {
         this.id = id;
         this.email = email;
-        this.create_at = create_at;
+        this.createAt = createAt;
     }
 }

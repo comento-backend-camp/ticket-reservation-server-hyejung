@@ -2,6 +2,7 @@ package comento.backend.ticket.controller;
 
 import comento.backend.ticket.config.SuccessCode;
 import comento.backend.ticket.config.SuccessResponse;
+import comento.backend.ticket.config.customException.NotFoundDataException;
 import comento.backend.ticket.domain.User;
 import comento.backend.ticket.dto.UserDto;
 import comento.backend.ticket.service.UserService;
@@ -22,19 +23,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    //이메일 등록
     @PostMapping("/signup")
-    public SuccessResponse addEmail(@Validated @RequestBody String email){
-        UserDto userDto = new UserDto(email);
-        System.out.println(userDto.toString());
+    public ResponseEntity addEmail(@Validated @RequestBody UserDto userDto){
         User receive = userService.saveUser(userDto);
 
         if(receive != null){
             successCode = SuccessCode.CREATED;
-            return SuccessResponse.res(
-                    successCode.getStatus(), successCode.getMessage(), CREATED_MSG , successCode.getHttpStatus());
+            return new ResponseEntity<>(SuccessResponse.res(
+                    successCode.getStatus(), successCode.getMessage(), CREATED_MSG), successCode.getHttpStatus());
         }else{
-            throw new RuntimeException("404");
+            throw new NotFoundDataException();
         }
     }
 

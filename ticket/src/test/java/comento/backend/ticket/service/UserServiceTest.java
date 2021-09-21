@@ -2,6 +2,7 @@ package comento.backend.ticket.service;
 
 import comento.backend.ticket.domain.User;
 import comento.backend.ticket.dto.UserDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("이메일을 입력하면 사용자 등록에 성공하여 DB에 저장한다.")
     public void 이메일_등록(){
         //given
         UserDto userDto = new UserDto("kimhyejung12@naver.com");
@@ -37,13 +39,13 @@ public class UserServiceTest {
         result.ifPresent(selectUser -> {
             System.out.println(selectUser.getId());
             System.out.println(selectUser.getEmail());
-            System.out.println(selectUser.getCreate_at());
+            System.out.println(selectUser.getCreateAt());
         });
 
         result2.ifPresent(selectUser -> {
             System.out.println(selectUser.getId());
             System.out.println(selectUser.getEmail());
-            System.out.println(selectUser.getCreate_at());
+            System.out.println(selectUser.getCreateAt());
         });
     }
 

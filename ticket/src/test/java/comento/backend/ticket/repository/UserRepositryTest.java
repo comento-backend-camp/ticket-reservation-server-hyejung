@@ -2,10 +2,12 @@ package comento.backend.ticket.repository;
 
 import comento.backend.ticket.domain.User;
 import comento.backend.ticket.service.UserService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import static org.assertj.core.api.Assertions.assertThat;
 
 //given
 //when
@@ -22,6 +24,7 @@ public class UserRepositryTest {
     }
 
     @Test
+    @DisplayName("이메일을 입력하면 사용자 등록에 성공하여 DB에 저장한다.")
     public void 사용자_등록(){
         //given
         User user = new User();
@@ -31,9 +34,6 @@ public class UserRepositryTest {
         User result = userRepository.save(user);
 
         //then
-        if(result != null)
-            System.out.println(result.getId());
-        else
-            System.out.println("실패");
+        assertThat(result.getId()).isNotNull();
     }
 }
