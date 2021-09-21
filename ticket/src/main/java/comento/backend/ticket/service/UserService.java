@@ -20,11 +20,11 @@ public class UserService {
     public User saveUser(UserDto userDto){
         User user = userDto.toEntity();
 
-        if(checkEmailDuplicate(user.getEmail())) {
-            return userRepository.save(user);
-        }else{
+        if(!checkEmailDuplicate(user.getEmail())) {
             throw new DuplicatedException("UserService");
         }
+
+        return userRepository.save(user);
     }
 
     private boolean checkEmailDuplicate(String email){

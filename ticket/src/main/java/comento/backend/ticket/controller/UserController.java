@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    private SuccessCode successCode;
+    private SuccessCode successCode = SuccessCode.CREATED;
     private final UserService userService;
     private static final String CREATED_MSG = "등록 성공";
 
@@ -25,16 +25,8 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity addEmail(@Validated @RequestBody UserDto userDto){
-        User receive = userService.saveUser(userDto);
-
-        if(receive != null){
-            successCode = SuccessCode.CREATED;
-            return new ResponseEntity<>(SuccessResponse.res(
-                    successCode.getStatus(), successCode.getMessage(), CREATED_MSG), successCode.getHttpStatus());
-        }else{
-            throw new NotFoundDataException();
-        }
+        userService.saveUser(userDto);
+        return new ResponseEntity<>(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), CREATED_MSG),
+                successCode.getHttpStatus());
     }
-
-
 }
