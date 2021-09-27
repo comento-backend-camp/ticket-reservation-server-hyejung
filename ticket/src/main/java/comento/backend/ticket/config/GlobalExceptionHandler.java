@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -26,10 +27,14 @@ public class GlobalExceptionHandler {
      */
 
     //ConstraintViolationException.class 는 유효성 검사 실패시 (@Validated)
-    @ExceptionHandler({JsonParseException.class, MethodArgumentNotValidException.class, ConstraintViolationException.class, MethodArgumentTypeMismatchException.class})
+    @ExceptionHandler({JsonParseException.class,
+            MethodArgumentNotValidException.class,
+                    ConstraintViolationException.class,
+            MethodArgumentTypeMismatchException.class,
+            MissingServletRequestParameterException.class})
     public static ResponseEntity missMatchExceptionHandler(Throwable t){
         errorCode = ErrorCode.INVALID_VALUE;
-        log.error(errorCode.getStatus() + errorCode.getMessage(), t);
+        log.error(errorCode.getStatus() + " " + errorCode.getMessage(), t);
         return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
                 errorCode.getHttpStatus());
     }
@@ -45,7 +50,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NoSuchElementException.class, NotFoundException.class, NotFoundDataException.class})
     public static ResponseEntity notFoundExceptionHandler(Throwable t){
         errorCode = ErrorCode.NO_DATA;
-        log.error(errorCode.getStatus()+ " " + errorCode.getMessage(), t);
+        log.error(errorCode.getStatus() + " " + errorCode.getMessage(), t);
         return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
                 errorCode.getHttpStatus());
     }
@@ -54,10 +59,10 @@ public class GlobalExceptionHandler {
     public static ResponseEntity duplicateExceptionHandler(DuplicatedException e){
         if (e.getMessage() == "UserService") { //호출된 곳이 UserService
             errorCode = ErrorCode.INVALID_USER;
-            log.error(errorCode.getStatus()+ " " + errorCode.getMessage(), e);
+            log.error(errorCode.getStatus() + " " + errorCode.getMessage(), e);
         }else{ //좌석 예약 시
             errorCode = ErrorCode.INVALID_SEAT;
-            log.error(errorCode.getStatus()+ " " + errorCode.getMessage(), e);
+            log.error(errorCode.getStatus() + " " + errorCode.getMessage(), e);
         }
         return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
                 errorCode.getHttpStatus());
@@ -66,7 +71,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({IllegalStateException.class, RuntimeException.class})
     public static ResponseEntity IllExceptionHandler(Throwable t){
         errorCode = ErrorCode.SERVER_ERROR;
-        log.error(errorCode.getStatus()+ " " + errorCode.getMessage(), t);
+        log.error(errorCode.getStatus() + " " + errorCode.getMessage(), t);
         return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
                 errorCode.getHttpStatus());
     }
