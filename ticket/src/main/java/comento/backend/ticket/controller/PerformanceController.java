@@ -2,9 +2,9 @@ package comento.backend.ticket.controller;
 
 import comento.backend.ticket.config.SuccessCode;
 import comento.backend.ticket.config.SuccessResponse;
-import comento.backend.ticket.config.customException.NotFoundDataException;
 import comento.backend.ticket.domain.Performance;
 import comento.backend.ticket.dto.PerformanceDto;
+import comento.backend.ticket.dto.PerformanceResponse;
 import comento.backend.ticket.service.PerformanceService;
 import comento.backend.ticket.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.*;
 import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/performance")
@@ -38,13 +40,7 @@ public class PerformanceController {
                                                   @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
                                               @Valid @RequestParam(value = "title", required = false) String title) {
         PerformanceDto performanceDto = new PerformanceDto(title, date);
-        List<Performance> result;
-        result = performanceDto.getTitle() != null ?
-                performanceService.getListByDateAndTitle(performanceDto) : performanceService.getListByDate(performanceDto);
-
-        if(result.isEmpty()){
-            throw new NotFoundDataException();
-        }
+        List<PerformanceResponse> result = performanceService.getListPerformance(performanceDto);
 
         return new ResponseEntity(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), result),
                 HttpStatus.OK);
