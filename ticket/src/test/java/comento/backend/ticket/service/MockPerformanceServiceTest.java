@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -24,8 +25,9 @@ import static org.mockito.Mockito.verify; //해당 기능이 사용되었는지 
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @ExtendWith(MockitoExtension.class) //JUnit5와 Mockito 연동
-public class PerformanceServiceTest2 {
+public class MockPerformanceServiceTest {
 
     @Mock //mock객체로 생성
     private PerformanceRepository performanceRepository;
@@ -55,9 +57,8 @@ public class PerformanceServiceTest2 {
         });
         //then
         String msg = nfde.getMessage();
-        assertThat(msg).isEqualTo(null);
+        assertThat(msg).isNull();
     }
-    //@TODO : 성공해야 하는데 두 테스트 메소드 모두 NotFoundDataException 발생,,
     @Test
     @DisplayName("[성공] 날짜를 정확히 입력한 경우")
     void 공연정보가_있으면_응답한다1() throws ParseException {
@@ -71,6 +72,7 @@ public class PerformanceServiceTest2 {
         List<PerformanceResponse> result =  performanceService.getListPerformance(new PerformanceDto(null, startDate));
 
         //then
+        System.out.println(result);
         assertThat(result.size()).isNotZero(); //2개
     }
     @Test
@@ -80,13 +82,14 @@ public class PerformanceServiceTest2 {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = format.parse("2021-06-20");
         String title = "국립무용단 <산조>";
-        List<Performance> temp = new ArrayList<>();
+        PerformanceDto dto = new PerformanceDto(title, startDate);
         given(performanceRepository.findByTitleAndStartDateGreaterThanEqualOrderByStartDate(title, startDate))
-                .willReturn(temp);
+                .willReturn(new ArrayList<>());
         //when
-        List<PerformanceResponse> result = performanceService.getListPerformance(new PerformanceDto(title, startDate));
+        List<PerformanceResponse> result = performanceService.getListPerformance(dto);
 
         //then
+        System.out.println(result);
         assertThat(result.size()).isNotZero();
     }
 }

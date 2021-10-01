@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,5 +30,10 @@ public class PerformanceService {
             throw new NotFoundDataException();
         }
         return result.stream().map(PerformanceResponse::of).collect(Collectors.toList());
+    }
+
+    public Performance getPerformance(Long id, String title){
+        Optional<Performance> performance = performanceRepository.findByIdAndTitle(id, title);
+        return performance.orElseThrow(NotFoundDataException::new);
     }
 }
