@@ -40,7 +40,7 @@ public class BookingService {
         updateSeat(seat, performance, reqBooking);
 
         //seat의 값이 있다면, booking 가능
-        addBookingHistory(user, performance, seat);
+        saveBookingSucessLog(user, performance, seat);
 
         //booking 여부 insert
         Booking booking = reqBooking.toEntity(user, performance, seat);
@@ -58,7 +58,7 @@ public class BookingService {
         seatService.updateSeat(seatDto);
     }
 
-    private void addBookingHistory(final User user, final Performance performance, final Seat seat) {
+    private void saveBookingSucessLog(final User user, final Performance performance, final Seat seat) {
         //booking의 성공 여부 history 저장
         BookingHistoryDto bookingHistoryDto = BookingHistoryDto.builder()
                         .user(user)
