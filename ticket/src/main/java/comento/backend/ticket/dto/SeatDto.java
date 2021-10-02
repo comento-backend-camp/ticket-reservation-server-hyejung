@@ -2,6 +2,7 @@ package comento.backend.ticket.dto;
 
 import comento.backend.ticket.domain.Performance;
 import comento.backend.ticket.domain.Seat;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -12,6 +13,9 @@ public class SeatDto {
     private Integer seatNumber;
     private boolean isBooking;
 
+    public SeatDto(){};
+
+    @Builder
     public SeatDto(Long seat_id, Performance performance, SeatType seatType, Integer seatNumber, boolean isBooking) {
         this.seat_id = seat_id;
         this.performance = performance;

@@ -49,7 +49,7 @@ public class MockPerformanceServiceTest {
         //performanceRepository를 mock했으니 테스트 상황에서 원하는 결과를 새롭게 구현하는 코드.
         //테스트가 돌아가는 동안에는 willReturn에서 반환하는 결과를 반드시 return하므로 PerformanceRepository를 의존하지 않고도 돌아가는 테스트코드가 완성
         given(performanceRepository.findByStartDateGreaterThanEqualOrderByStartDateAsc(startDate))
-                .willReturn(new ArrayList<Performance>());
+                .willReturn(new ArrayList<Performance>()); //빈 배열 반환
         //when
         //공연정보가 없는 경우 Service에서는 NOT FOUND ERROR 예외 호출
         NotFoundDataException nfde = assertThrows(NotFoundDataException.class, () -> {
@@ -67,13 +67,12 @@ public class MockPerformanceServiceTest {
         Date startDate = format.parse("2021-06-20");
 
         given(performanceRepository.findByStartDateGreaterThanEqualOrderByStartDateAsc(startDate))
-                .willReturn(new ArrayList<>());
+                .willReturn(PerformanceFixture.performances(startDate));
         //when
         List<PerformanceResponse> result =  performanceService.getListPerformance(new PerformanceDto(null, startDate));
 
         //then
-        System.out.println(result);
-        assertThat(result.size()).isNotZero(); //2개
+        assertThat(result.size()).isNotZero();
     }
     @Test
     @DisplayName("[성공] 날짜, 제목을 정확히 입력한 경우")
@@ -84,12 +83,47 @@ public class MockPerformanceServiceTest {
         String title = "국립무용단 <산조>";
         PerformanceDto dto = new PerformanceDto(title, startDate);
         given(performanceRepository.findByTitleAndStartDateGreaterThanEqualOrderByStartDate(title, startDate))
-                .willReturn(new ArrayList<>());
+                .willReturn(PerformanceFixture.performances(startDate, title));
         //when
         List<PerformanceResponse> result = performanceService.getListPerformance(dto);
 
         //then
-        System.out.println(result);
         assertThat(result.size()).isNotZero();
+    }
+    private static class PerformanceFixture {
+        public static List<Performance> performances(final Date date) {
+            List<Performance> performances = new ArrayList<>();
+            performances.add(performance(date));
+            return performances;
+        }
+        public static List<Performance> performances(final Date date, final String title) {
+            List<Performance> performances = new ArrayList<>();
+            performances.add(performance(date, title));
+            return performances;
+        }
+        public static Performance performance(final Date startDate) {
+            return Performance.builder()
+                    .id(null)
+                    .title(null)
+                    .startDate(startDate)
+                    .endDate(null)
+                    .genere(null)
+                    .description(null)
+                    .price(null)
+                    .runningTime(null)
+                    .build();
+        }
+        public static Performance performance(final Date startDate, final String title) {
+            return Performance.builder()
+                    .id(null)
+                    .title(title)
+                    .startDate(startDate)
+                    .endDate(null)
+                    .genere(null)
+                    .description(null)
+                    .price(null)
+                    .runningTime(null)
+                    .build();
+        }
     }
 }

@@ -13,7 +13,7 @@ public class BookingHistoryService {
         this.bookingHistoryRepository = bookingHistoryRepository;
     }
 
-    public BookingHistory saveBookingHistory(BookingHistoryDto bookingHistoryDto){
+    public BookingHistory saveBookingHistory(final BookingHistoryDto bookingHistoryDto){
         BookingHistory bookingHistory = bookingHistoryDto.toEntity();
         return bookingHistoryRepository.save(bookingHistory);
     }

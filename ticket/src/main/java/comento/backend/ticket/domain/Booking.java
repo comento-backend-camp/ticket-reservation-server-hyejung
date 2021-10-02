@@ -17,15 +17,15 @@ public class Booking {
     @Column(name="booking_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_id")
     private Performance performance;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "seat_id")
     private Seat seat;
 

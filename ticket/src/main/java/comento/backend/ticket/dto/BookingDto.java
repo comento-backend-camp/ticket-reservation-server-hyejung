@@ -27,37 +27,8 @@ public class BookingDto {
     private SeatType seatType;
     private Integer seatNumber;
     private String price;
-    private User user;
-    private Performance performance;
-    private Seat seat;
 
-    public BookingDto() {
-    }
-
-    public BookingDto(Long id, String title, Date startDate, String email, SeatType seatType, Integer seatNumber, String price) {
-        this.id = id;
-        this.title = title;
-        this.startDate = startDate;
-        this.email = email;
-        this.seatType = seatType;
-        this.seatNumber = seatNumber;
-        this.price = price;
-    }
-
-    public BookingDto(Long id, String title, Date startDate, String email, SeatType seatType, Integer seatNumber, String price, User user, Performance performance, Seat seat) {
-        this.id = id;
-        this.title = title;
-        this.startDate = startDate;
-        this.email = email;
-        this.seatType = seatType;
-        this.seatNumber = seatNumber;
-        this.price = price;
-        this.user = user;
-        this.performance = performance;
-        this.seat = seat;
-    }
-
-    public Booking toEntity() {
+    public Booking toEntity(final User user, final Performance performance, final Seat seat) {
         return Booking.builder()
                 .user(user)
                 .performance(performance)

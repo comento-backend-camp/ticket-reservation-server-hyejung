@@ -3,9 +3,9 @@ package comento.backend.ticket.service;
 import comento.backend.ticket.config.customException.NotFoundDataException;
 import comento.backend.ticket.domain.Performance;
 import comento.backend.ticket.domain.Seat;
-import comento.backend.ticket.dto.PerformanceDto;
 import comento.backend.ticket.dto.PerformanceResponse;
 import comento.backend.ticket.dto.SeatResponse;
+import comento.backend.ticket.dto.SeatType;
 import comento.backend.ticket.repository.SeatRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,22 +32,25 @@ public class MockSeatServiceTest {
     private SeatRepository seatRepository;
 
     private SeatService seatService;
+    private BookingHistoryService bookingHistoryService;
 
     @BeforeEach
     void init() {
-        seatService = new SeatService(seatRepository); //mock 주입
+        seatService = new SeatService(seatRepository, bookingHistoryService); //mock 주입
     }
     @Test
     @DisplayName("[실패] 404 NOT FOUND ERROR")
     void 좌석_정보가_없으면_예외를_던진다() {
         //given
-        Long id = 1L;
+        Performance performance = new Performance(1L, null, null, null, null, null, null, null);
+        PerformanceResponse performanceResponse = new PerformanceResponse(performance.getId(), "2022 정오의 음악회 5월", null, null,
+                "전석 20,000원", null, null, null);
 
-        given(seatRepository.findByPerformanceId(id))
-                .willReturn(new ArrayList<Seat>());
+        given(seatRepository.findByPerformance(performance))
+                .willReturn(new ArrayList<>());
         //when
         NotFoundDataException nfde = assertThrows(NotFoundDataException.class, () -> {
-            seatService.getListPerformanceSeat(id);
+            seatService.getListPerformanceSeat(performanceResponse);
         });
         //then
         String msg = nfde.getMessage();
@@ -64,13 +67,29 @@ public class MockSeatServiceTest {
 
         Performance performance = new Performance();
         performance.setId(performanceResponse.getId());
-
         given(seatRepository.findByPerformance(performance))
-                .willReturn(new ArrayList<Seat>());
+                .willReturn(SeatFixture.seats());
         //when
         List<SeatResponse> list =  seatService.getListPerformanceSeat(performanceResponse);
 
         //then
         assertThat(list.size()).isNotZero();
+    }
+
+    //반복적으로 테스트하여 사용할 객체를 위한 클래스 생성
+    private static class SeatFixture {
+        public static List<Seat> seats() {
+            List<Seat> seats = new ArrayList<>();
+            seats.add(seat());
+            return seats;
+        }
+        public static Seat seat() {
+            return Seat.builder()
+                    .id(1L)
+                    .seatType(SeatType.S)
+                    .seatNumber(1)
+                    .performance(new Performance())
+                    .build();
+        }
     }
 }

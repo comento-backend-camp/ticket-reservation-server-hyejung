@@ -19,7 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User saveUser(UserDto userDto){
+    public User saveUser(final UserDto userDto){
         User user = userDto.toEntity();
 
         if(!checkEmailDuplicate(user.getEmail())) {
@@ -29,12 +29,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private boolean checkEmailDuplicate(String email){
+    private boolean checkEmailDuplicate(final String email){
         User user = userRepository.findByEmail(email).orElseGet(()->null);
         return Objects.isNull(user); //null이면 true
     }
 
-    public User getUser(String email){
+    public User getUser(final String email){
         Optional<User> user = userRepository.findByEmail(email);
         return user.orElseThrow(NoAuthException::new);
     }

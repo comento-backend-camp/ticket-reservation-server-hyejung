@@ -20,7 +20,7 @@ public class PerformanceService {
         this.performanceRepository = performanceRepository;
     }
 
-    public List<PerformanceResponse> getListPerformance(PerformanceDto performanceDto){
+    public List<PerformanceResponse> getListPerformance(final PerformanceDto performanceDto){
         Date startDate = performanceDto.getStartDate();
         String title = performanceDto.getTitle();
         List<Performance> result = title != null ?
@@ -32,7 +32,7 @@ public class PerformanceService {
         return result.stream().map(PerformanceResponse::of).collect(Collectors.toList());
     }
 
-    public Performance getPerformance(Long id, String title){
+    public Performance getPerformance(final Long id, final String title){
         Optional<Performance> performance = performanceRepository.findByIdAndTitle(id, title);
         return performance.orElseThrow(NotFoundDataException::new);
     }
