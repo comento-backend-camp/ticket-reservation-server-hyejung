@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class BookingService {
     private static final int WAIT_TIME = 1;
-    private static final int LEASE_TIME = 1;
+    private static final int LEASE_TIME = 2;
     private static final String SEAT_LOCK = "seat_lock";
 
     private final BookingRepository bookingRepository;
@@ -62,7 +62,7 @@ public class BookingService {
             //booking 여부 insert
             booking = reqBooking.toEntity(user, performance, seat);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         } finally {
             lock.unlock();
             log.info("lock 반납");
