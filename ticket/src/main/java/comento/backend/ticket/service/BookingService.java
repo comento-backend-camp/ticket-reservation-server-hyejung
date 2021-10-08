@@ -40,8 +40,6 @@ public class BookingService {
 
     public Booking saveBookging(final BookingDto reqBooking) {
         RLock lock = redissonClient.getLock(SEAT_LOCK);
-        lock.lock(LEASE_TIME, TimeUnit.SECONDS);
-
         Booking booking = null;
         try {
             if (!(lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS))) {
