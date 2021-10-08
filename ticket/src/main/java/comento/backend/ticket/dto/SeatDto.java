@@ -2,6 +2,7 @@ package comento.backend.ticket.dto;
 
 import comento.backend.ticket.domain.Performance;
 import comento.backend.ticket.domain.Seat;
+import comento.backend.ticket.emum.SeatType;
 import lombok.Builder;
 import lombok.Data;
 

@@ -6,13 +6,12 @@ import comento.backend.ticket.domain.Performance;
 import comento.backend.ticket.domain.Seat;
 import comento.backend.ticket.domain.User;
 import comento.backend.ticket.dto.*;
+import comento.backend.ticket.emum.SeatType;
 import comento.backend.ticket.repository.SeatRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +24,6 @@ public class SeatService {
         this.bookingHistoryService = bookingHistoryService;
     }
 
-    @Transactional(readOnly = true)
     public List<SeatResponse> getListPerformanceSeat(final PerformanceResponse performanceData) {
         Performance performance = new Performance();
         performance.setId(performanceData.getId());
@@ -41,27 +39,17 @@ public class SeatService {
         return seatRepository.save(seat);
     }
 
-    // @TODO : insert 쿼리도 출력되고, 예외도 발생하지만 BookingHisotry 테이블에 새 데이터 insert가 안된다 ..
-    @Transactional
-    public Seat getIsBooking(final User user, final Performance performance, final SeatType seatType, final Integer seatNumber, final boolean isBooking) {
-        Seat seatIsBooking = seatRepository.findByPerformanceAndSeatTypeAndSeatNumberAndIsBooking(performance, seatType, seatNumber, isBooking)
+    public Seat getIsBooking(final User user, final Performance performance, final SeatType seatType, final Integer seatNumber){
+        Seat seatIsBooking = seatRepository.findByPerformanceAndSeatTypeAndSeatNumber(performance, seatType, seatNumber)
                 .orElseGet(()-> null);
-        if(Objects.isNull(seatIsBooking)){
-            saveBookingFailLog(user, performance, null);
+        if(seatIsBooking.isBooking()){ //true라면 예약 불가
+            bookingHistoryService.saveBookingFailLog(user, performance, seatIsBooking);
             throw new DuplicatedException("SeatService");
         }
-        return seatIsBooking;
-    }
 
-    private void saveBookingFailLog(final User user, final Performance performance, final Seat seat) {
-        //실패 여부 BookingHistory에 저장
-        BookingHistoryDto bookingHistoryDto = BookingHistoryDto.builder()
-                .id(null)
-                .user(user)
-                .performance(performance)
-                .seat(seat)
-                .isSuccess(false)
-                .build();
-        bookingHistoryService.saveBookingHistory(bookingHistoryDto);
+        if(Objects.isNull(seatIsBooking)){ //좌석 정보 없음
+            throw new NotFoundDataException();
+        }
+        return seatIsBooking;
     }
 }

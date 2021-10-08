@@ -2,7 +2,6 @@ package comento.backend.ticket.controller;
 
 import comento.backend.ticket.config.SuccessCode;
 import comento.backend.ticket.config.SuccessResponse;
-import comento.backend.ticket.domain.Booking;
 import comento.backend.ticket.dto.BookingDto;
 import comento.backend.ticket.dto.BookingResponse;
 import comento.backend.ticket.dto.BookingResponseCreated;

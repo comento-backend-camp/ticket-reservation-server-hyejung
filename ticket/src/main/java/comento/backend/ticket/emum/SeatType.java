@@ -1,4 +1,4 @@
-package comento.backend.ticket.dto;
+package comento.backend.ticket.emum;
 
 public enum SeatType {
     VIP,

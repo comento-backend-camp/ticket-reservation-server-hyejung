@@ -1,5 +1,6 @@
 package comento.backend.ticket.dto;
 
+import comento.backend.ticket.emum.SeatType;
 import lombok.Data;
 
 import java.util.Date;
