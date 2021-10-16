@@ -3,10 +3,10 @@ package comento.backend.ticket.config;
 import com.fasterxml.jackson.core.JsonParseException;
 import comento.backend.ticket.config.customException.DuplicatedException;
 import comento.backend.ticket.config.customException.NoAuthException;
+import comento.backend.ticket.config.customException.NoDataException;
 import comento.backend.ticket.config.customException.NotFoundDataException;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -47,9 +47,17 @@ public class GlobalExceptionHandler {
                 errorCode.getHttpStatus());
     }
 
+    @ExceptionHandler(NoDataException.class)
+    public static ResponseEntity noDataExceptionHandler(Throwable t){
+        errorCode = ErrorCode.NO_DATA;
+        log.error(errorCode.getStatus() + " " + errorCode.getMessage(), t);
+        return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
+                errorCode.getHttpStatus());
+    }
+
     @ExceptionHandler({NoSuchElementException.class, NotFoundException.class, NotFoundDataException.class})
     public static ResponseEntity notFoundExceptionHandler(Throwable t){
-        errorCode = ErrorCode.NO_DATA;
+        errorCode = ErrorCode.NOT_FOUND;
         log.error(errorCode.getStatus() + " " + errorCode.getMessage(), t);
         return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
                 errorCode.getHttpStatus());

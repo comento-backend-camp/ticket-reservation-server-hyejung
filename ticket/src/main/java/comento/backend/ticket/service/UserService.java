@@ -6,6 +6,7 @@ import comento.backend.ticket.domain.User;
 import comento.backend.ticket.dto.UserDto;
 import comento.backend.ticket.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public User saveUser(final UserDto userDto){
         User user = userDto.toEntity();
 

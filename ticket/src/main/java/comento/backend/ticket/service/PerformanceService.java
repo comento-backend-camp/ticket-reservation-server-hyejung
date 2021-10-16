@@ -6,6 +6,7 @@ import comento.backend.ticket.dto.PerformanceDto;
 import comento.backend.ticket.dto.PerformanceResponse;
 import comento.backend.ticket.repository.PerformanceRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Date;
@@ -20,6 +21,7 @@ public class PerformanceService {
         this.performanceRepository = performanceRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<PerformanceResponse> getListPerformance(final PerformanceDto performanceDto){
         Date startDate = performanceDto.getStartDate();
         String title = performanceDto.getTitle();
@@ -32,6 +34,7 @@ public class PerformanceService {
         return result.stream().map(PerformanceResponse::of).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public Performance getPerformance(final Long id, final String title){
         Optional<Performance> performance = performanceRepository.findByIdAndTitle(id, title);
         return performance.orElseThrow(NotFoundDataException::new);
