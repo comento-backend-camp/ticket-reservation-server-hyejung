@@ -12,7 +12,6 @@ public class ErrorResponse<T>{
     private String message;
     private String reason;
 
-    //공통된 Error Message를 전송할 때 사용
     public static ErrorResponse res(final Integer status, final String message, final String reason){
         return ErrorResponse.builder()
                 .status(status)

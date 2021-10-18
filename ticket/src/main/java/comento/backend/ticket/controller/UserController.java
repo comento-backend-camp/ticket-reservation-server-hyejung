@@ -7,6 +7,7 @@ import comento.backend.ticket.domain.User;
 import comento.backend.ticket.dto.UserDto;
 import comento.backend.ticket.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity addEmail(@Validated @RequestBody UserDto userDto){
         userService.saveUser(userDto);
-        return new ResponseEntity<>(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), CREATED_MSG),
-                successCode.getHttpStatus());
+        return ResponseEntity.status(successCode.getHttpStatus())
+                .body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), CREATED_MSG));
     }
 }

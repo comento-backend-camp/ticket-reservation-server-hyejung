@@ -41,9 +41,7 @@ public class PerformanceController {
                                               @Valid @RequestParam(value = "title", required = false) String title) {
         PerformanceDto performanceDto = new PerformanceDto(title, date);
         List<PerformanceResponse> result = performanceService.getListPerformance(performanceDto);
-
-        return new ResponseEntity(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), result),
-                HttpStatus.OK);
+        return ResponseEntity.ok().body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), result));
     }
 
     @GetMapping("/info/seat")
@@ -54,8 +52,6 @@ public class PerformanceController {
         List<PerformanceResponse> performanceData = performanceService.getListPerformance(performanceDto);
 
         List<SeatResponse> seatResult = seatService.getListPerformanceSeat(performanceData.get(0));
-
-        return new ResponseEntity(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), seatResult),
-                HttpStatus.OK);
+        return ResponseEntity.ok().body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), seatResult));
     }
 }

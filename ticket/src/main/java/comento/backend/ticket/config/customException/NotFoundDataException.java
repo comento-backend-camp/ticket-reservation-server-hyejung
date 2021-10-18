@@ -1,10 +1,10 @@
 package comento.backend.ticket.config.customException;
 
-public class NotFoundDataException extends RuntimeException{
-    public NotFoundDataException() {
-    }
+import comento.backend.ticket.config.CustomException;
+import comento.backend.ticket.config.ErrorCode;
 
-    public NotFoundDataException(String message) {
-        super(message);
+public class NotFoundDataException extends CustomException {
+    public NotFoundDataException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }
