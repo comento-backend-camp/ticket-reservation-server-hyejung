@@ -1,10 +1,10 @@
 package comento.backend.ticket.config.customException;
 
-public class DuplicatedException extends RuntimeException{
-    public DuplicatedException() {
-    }
+import comento.backend.ticket.config.CustomException;
+import comento.backend.ticket.config.ErrorCode;
 
-    public DuplicatedException(String message) {
-        super(message);
+public class DuplicatedException extends CustomException {
+    public DuplicatedException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

@@ -1,5 +1,6 @@
 package comento.backend.ticket.service;
 
+import comento.backend.ticket.config.ErrorCode;
 import comento.backend.ticket.config.customException.NotFoundDataException;
 import comento.backend.ticket.domain.Performance;
 import comento.backend.ticket.dto.PerformanceDto;
@@ -29,7 +30,7 @@ public class PerformanceService {
                 performanceRepository.findByTitleAndStartDateGreaterThanEqualOrderByStartDate(title, startDate) :
                 performanceRepository.findByStartDateGreaterThanEqualOrderByStartDateAsc(startDate);
         if(result.isEmpty()){
-            throw new NotFoundDataException();
+            throw new NotFoundDataException(ErrorCode.NOT_FOUND);
         }
         return result.stream().map(PerformanceResponse::of).collect(Collectors.toList());
     }
@@ -37,6 +38,6 @@ public class PerformanceService {
     @Transactional(readOnly = true)
     public Performance getPerformance(final Long id, final String title){
         Optional<Performance> performance = performanceRepository.findByIdAndTitle(id, title);
-        return performance.orElseThrow(NotFoundDataException::new);
+        return performance.orElseThrow(() -> new NotFoundDataException(ErrorCode.NOT_FOUND));
     }
 }

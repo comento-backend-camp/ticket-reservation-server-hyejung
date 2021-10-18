@@ -1,17 +1,16 @@
 package comento.backend.ticket.service;
 
-import comento.backend.ticket.config.customException.NoDataException;
+import comento.backend.ticket.config.ErrorCode;
+import comento.backend.ticket.config.customException.NotFoundDataException;
 import comento.backend.ticket.domain.*;
 import comento.backend.ticket.dto.*;
 import comento.backend.ticket.repository.BookingRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -91,7 +90,7 @@ public class BookingService {
         User user = userService.getUser(email);
         List<BookingResponse> result = bookingRepository.findMyBooking(true, user.getEmail());
         if (result.isEmpty()) {
-            throw new NoDataException();
+            throw new NotFoundDataException(ErrorCode.NOT_FOUND);
         }
         return result;
     }

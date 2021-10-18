@@ -1,10 +1,6 @@
 package comento.backend.ticket.config;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import comento.backend.ticket.config.customException.DuplicatedException;
-import comento.backend.ticket.config.customException.NoAuthException;
-import comento.backend.ticket.config.customException.NoDataException;
-import comento.backend.ticket.config.customException.NotFoundDataException;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,65 +18,36 @@ import java.util.NoSuchElementException;
 public class GlobalExceptionHandler {
     private static ErrorCode errorCode;
 
-    /**
-     * 특정 Exception을 지정하여 별도로 처리
-     */
-
     //ConstraintViolationException.class 는 유효성 검사 실패시 (@Validated)
     @ExceptionHandler({JsonParseException.class,
             MethodArgumentNotValidException.class,
                     ConstraintViolationException.class,
             MethodArgumentTypeMismatchException.class,
             MissingServletRequestParameterException.class})
-    public static ResponseEntity missMatchExceptionHandler(Throwable t){
+    public static ResponseEntity<ErrorResponse> missMatchExceptionHandler(){
         errorCode = ErrorCode.INVALID_VALUE;
-        log.error(errorCode.getStatus() + " " + errorCode.getMessage(), t);
-        return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
-                errorCode.getHttpStatus());
+        log.error(String.valueOf(errorCode.getHttpStatus()), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()));
     }
 
-    @ExceptionHandler(NoAuthException.class)
-    public static ResponseEntity noAuthExceptionHandler(NoAuthException e){
-        errorCode = ErrorCode.NO_USER;
-        log.error(errorCode.getStatus() + errorCode.getMessage(), e);
-        return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
-                errorCode.getHttpStatus());
+    @ExceptionHandler(CustomException.class)
+    public static ResponseEntity customExceptionHandler(CustomException e){
+        errorCode = e.getErrorCode();
+        log.error(String.valueOf(errorCode.getHttpStatus()), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()));
     }
 
-    @ExceptionHandler(NoDataException.class)
-    public static ResponseEntity noDataExceptionHandler(Throwable t){
-        errorCode = ErrorCode.NO_DATA;
-        log.error(errorCode.getStatus() + " " + errorCode.getMessage(), t);
-        return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
-                errorCode.getHttpStatus());
-    }
-
-    @ExceptionHandler({NoSuchElementException.class, NotFoundException.class, NotFoundDataException.class})
-    public static ResponseEntity notFoundExceptionHandler(Throwable t){
+    @ExceptionHandler({NoSuchElementException.class, NotFoundException.class})
+    public static ResponseEntity notFoundExceptionHandler(){
         errorCode = ErrorCode.NOT_FOUND;
-        log.error(errorCode.getStatus() + " " + errorCode.getMessage(), t);
-        return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
-                errorCode.getHttpStatus());
+        log.error(String.valueOf(errorCode.getHttpStatus()), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()));
     }
 
-    @ExceptionHandler(DuplicatedException.class)
-    public static ResponseEntity duplicateExceptionHandler(DuplicatedException e){
-        if (e.getMessage() == "UserService") { //호출된 곳이 UserService
-            errorCode = ErrorCode.INVALID_USER;
-            log.error(errorCode.getStatus() + " " + errorCode.getMessage(), e);
-        }else{ //좌석 예약 시
-            errorCode = ErrorCode.INVALID_SEAT;
-            log.error(errorCode.getStatus() + " " + errorCode.getMessage(), e);
-        }
-        return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
-                errorCode.getHttpStatus());
-    }
-
-    @ExceptionHandler({IllegalStateException.class, RuntimeException.class})
-    public static ResponseEntity IllExceptionHandler(Throwable t){
+    @ExceptionHandler(Exception.class)
+    public static ResponseEntity IllExceptionHandler(Exception e){
         errorCode = ErrorCode.SERVER_ERROR;
-        log.error(errorCode.getStatus() + " " + errorCode.getMessage(), t);
-        return new ResponseEntity<>(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()),
-                errorCode.getHttpStatus());
+        log.error(String.valueOf(errorCode.getHttpStatus()), errorCode.getMessage(), e);
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ErrorResponse.res(errorCode.getStatus(), errorCode.getMessage(), errorCode.getReason()));
     }
 }

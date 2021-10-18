@@ -1,10 +1,10 @@
 package comento.backend.ticket.config.customException;
 
-public class NoAuthException extends RuntimeException{
-    public NoAuthException() {
-    }
+import comento.backend.ticket.config.CustomException;
+import comento.backend.ticket.config.ErrorCode;
 
-    public NoAuthException(String message) {
-        super(message);
+public class NoAuthException extends CustomException {
+    public NoAuthException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }
