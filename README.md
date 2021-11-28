@@ -1,6 +1,6 @@
 # 🔖 공연 예약 시스템 (Ticket Reservation System)🔖
 
-### :fire: [Wiki](https://github.com/comento-backend-camp/ticket-reservation-server-hyejung/wiki)
+### :fire: [Wiki](https://github.com/comento-backend-camp/ticket-reservation-server-hyejung/wiki)에는 개발 과정에서 발생한 문제를 해결한 문서를 확인할 수 있어요!!
 
 ###  :memo: API 설계
 [API 설계문서 바로가기](https://www.notion.so/hyejung/1-API-75703ef0186e49728171827e07ea1c31)
