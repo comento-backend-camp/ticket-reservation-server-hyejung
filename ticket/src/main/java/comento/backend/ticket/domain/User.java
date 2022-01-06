@@ -3,7 +3,6 @@ package comento.backend.ticket.domain;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,7 +28,7 @@ public class User{
     public User(){}
 
     @Builder
-    public User(long id, String email, Date create_at) {
+    public User(long id, String email, Date createAt) {
         this.id = id;
         this.email = email;
         this.createAt = createAt;

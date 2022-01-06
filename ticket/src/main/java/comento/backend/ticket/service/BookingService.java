@@ -76,7 +76,7 @@ public class BookingService {
 
     private void updateSeat(final Seat seat, final Performance performance, final BookingDto reqBooking) {
         SeatDto seatDto = SeatDto.builder()
-                .seat_id(seat.getId())
+                .seatId(seat.getId())
                 .performance(performance)
                 .seatType(reqBooking.getSeatType())
                 .seatNumber(reqBooking.getSeatNumber())
