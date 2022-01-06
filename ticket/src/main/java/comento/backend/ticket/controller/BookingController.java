@@ -1,7 +1,6 @@
 package comento.backend.ticket.controller;
 
 import comento.backend.ticket.config.ErrorCode;
-import comento.backend.ticket.config.ErrorResponse;
 import comento.backend.ticket.config.SuccessCode;
 import comento.backend.ticket.config.SuccessResponse;
 import comento.backend.ticket.config.customException.DuplicatedException;
@@ -13,7 +12,6 @@ import comento.backend.ticket.dto.BookingResponse;
 import comento.backend.ticket.dto.BookingResponseCreated;
 import comento.backend.ticket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,7 @@ public class BookingController {
     private final SeatService seatService;
 
     private SuccessCode successCode;
-    private BookingResponseCreated result;
+    private BookingResponseCreated bookingResponseCreated;
 
     @Autowired
     public BookingController(BookingService bookingService, BookingHistoryService bookingHistoryService, UserService userService, PerformanceService performanceService, SeatService seatService) {
@@ -42,7 +40,7 @@ public class BookingController {
     }
 
     @PostMapping("")
-    public ResponseEntity addBooking(@Valid @RequestBody BookingDto reqBooking){
+    public ResponseEntity<Object> addBooking(@Valid @RequestBody BookingDto reqBooking){
         final User user = userService.getUser(reqBooking.getEmail());
         final Performance performance = performanceService.getPerformance(reqBooking.getId(), reqBooking.getTitle());
         final Seat seat = seatService.getIsBooking(performance, reqBooking.getSeatType(), reqBooking.getSeatNumber()); //false라면 예약 가능
@@ -53,18 +51,18 @@ public class BookingController {
         }else{
             bookingService.saveBooking(user, performance, seat, reqBooking);
             bookingHistoryService.saveBookingSucessLog(user, performance, seat);
-            result = new BookingResponseCreated(reqBooking.getSeatType(), reqBooking.getSeatNumber());
+            bookingResponseCreated = new BookingResponseCreated(reqBooking.getSeatType(), reqBooking.getSeatNumber());
             successCode = SuccessCode.CREATED;
         }
         return ResponseEntity.status(successCode.getHttpStatus())
-                .body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), result));
+                .body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), bookingResponseCreated));
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity showMyBooking(@Valid @PathVariable String email){
-        List<BookingResponse> result = bookingService.getMyBooking(email);
+    public ResponseEntity<Object> showMyBooking(@Valid @PathVariable String email){
+        List<BookingResponse> myBooking = bookingService.getMyBooking(email);
         successCode = SuccessCode.OK;
         return ResponseEntity.status(successCode.getHttpStatus())
-                .body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), result));
+                .body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), myBooking));
     }
 }

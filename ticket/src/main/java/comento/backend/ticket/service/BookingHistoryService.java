@@ -7,7 +7,6 @@ import comento.backend.ticket.domain.User;
 import comento.backend.ticket.dto.BookingHistoryDto;
 import comento.backend.ticket.repository.BookingHistoryRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BookingHistoryService {
