@@ -39,8 +39,7 @@ public class SeatService {
 
     @Transactional(readOnly = true)
     public Seat getIsBooking(final Performance performance, final SeatType seatType, final Integer seatNumber){
-        Seat seatIsBooking = seatRepository.findByPerformanceAndSeatTypeAndSeatNumber(performance, seatType, seatNumber)
+        return seatRepository.findByPerformanceAndSeatTypeAndSeatNumber(performance, seatType, seatNumber)
                 .orElseGet(()-> null);
-        return seatIsBooking;
     }
 }

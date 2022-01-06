@@ -8,17 +8,15 @@ import lombok.Data;
 
 @Data
 public class SeatDto {
-    private Long seat_id;
+    private Long seatId;
     private Performance performance;
     private SeatType seatType;
     private Integer seatNumber;
     private boolean isBooking;
 
-    public SeatDto(){};
-
     @Builder
-    public SeatDto(Long seat_id, Performance performance, SeatType seatType, Integer seatNumber, boolean isBooking) {
-        this.seat_id = seat_id;
+    public SeatDto(Long seatId, Performance performance, SeatType seatType, Integer seatNumber, boolean isBooking) {
+        this.seatId = seatId;
         this.performance = performance;
         this.seatType = seatType;
         this.seatNumber = seatNumber;
@@ -27,7 +25,7 @@ public class SeatDto {
 
     public Seat toEntity(){
         return Seat.builder()
-                .id(seat_id)
+                .id(seatId)
                 .performance(performance)
                 .seatType(seatType)
                 .seatNumber(seatNumber)
