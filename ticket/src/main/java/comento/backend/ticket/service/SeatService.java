@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class SeatService {
+<<<<<<< HEAD
 	private final SeatRepository seatRepository;
 
 	public SeatService(SeatRepository seatRepository) {
@@ -43,4 +44,33 @@ public class SeatService {
 		return seatRepository.findByPerformanceAndSeatTypeAndSeatNumber(performance, seatType, seatNumber)
 			.orElseGet(() -> null);
 	}
+=======
+    private final SeatRepository seatRepository;
+
+    public SeatService(SeatRepository seatRepository) {
+        this.seatRepository = seatRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public List<SeatResponse> getListPerformanceSeat(final PerformanceResponse performanceData) {
+        Performance performance = new Performance();
+        performance.setId(performanceData.getId());
+        List<Seat> seatResult =  seatRepository.findByPerformance(performance);
+        if(seatResult.isEmpty()){
+            throw new NotFoundDataException(ErrorCode.NOT_FOUND);
+        }
+        return seatResult.stream().map(SeatResponse::of).collect(Collectors.toList());
+    }
+
+    public Seat updateSeat(final SeatDto seatDto) {
+        Seat seat = seatDto.toEntity();
+        return seatRepository.save(seat);
+    }
+
+    @Transactional(readOnly = true)
+    public Seat getIsBooking(final Performance performance, final SeatType seatType, final Integer seatNumber){
+        return seatRepository.findByPerformanceAndSeatTypeAndSeatNumber(performance, seatType, seatNumber)
+                .orElseGet(()-> null);
+    }
+>>>>>>> main
 }
