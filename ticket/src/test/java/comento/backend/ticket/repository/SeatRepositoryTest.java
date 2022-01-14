@@ -2,7 +2,7 @@ package comento.backend.ticket.repository;
 
 import comento.backend.ticket.domain.Performance;
 import comento.backend.ticket.domain.Seat;
-import comento.backend.ticket.dto.SeatType;
+import comento.backend.ticket.emum.SeatType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

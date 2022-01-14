@@ -9,18 +9,16 @@ import javax.validation.constraints.Email;
 @Getter
 @Data
 public class UserDto {
-    @Email
-    private String email;
+	@Email
+	private String email;
 
-    public UserDto(){}
+	public UserDto(String email) {
+		this.email = email;
+	}
 
-    public UserDto(String email) {
-        this.email = email;
-    }
-
-    public User toEntity(){
-        return User.builder()
-                .email(email)
-                .build();
-    }
+	public User toEntity() {
+		return User.builder()
+			.email(email)
+			.build();
+	}
 }

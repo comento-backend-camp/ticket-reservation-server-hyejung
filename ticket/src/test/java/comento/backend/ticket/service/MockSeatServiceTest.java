@@ -5,7 +5,7 @@ import comento.backend.ticket.domain.Performance;
 import comento.backend.ticket.domain.Seat;
 import comento.backend.ticket.dto.PerformanceResponse;
 import comento.backend.ticket.dto.SeatResponse;
-import comento.backend.ticket.dto.SeatType;
+import comento.backend.ticket.emum.SeatType;
 import comento.backend.ticket.repository.SeatRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +36,7 @@ public class MockSeatServiceTest {
 
     @BeforeEach
     void init() {
-        seatService = new SeatService(seatRepository, bookingHistoryService); //mock 주입
+        seatService = new SeatService(seatRepository); //mock 주입
     }
     @Test
     @DisplayName("[실패] 404 NOT FOUND ERROR")

@@ -22,30 +22,31 @@ import java.util.Date;
 @Getter
 @Data
 public class BookingDto {
-    private Long id;
-    private String title;
-    private Date startDate;
-    private String email;
-    private SeatType seatType;
-    private Integer seatNumber;
-    private String price;
+	private Long id;
+	private String title;
+	private Date startDate;
+	private String email;
+	private SeatType seatType;
+	private Integer seatNumber;
+	private String price;
 
-    @Builder
-    public BookingDto(Long id, String title, Date startDate, String email, SeatType seatType, Integer seatNumber, String price) {
-        this.id = id;
-        this.title = title;
-        this.startDate = startDate;
-        this.email = email;
-        this.seatType = seatType;
-        this.seatNumber = seatNumber;
-        this.price = price;
-    }
+	@Builder
+	public BookingDto(Long id, String title, Date startDate, String email, SeatType seatType, Integer seatNumber,
+		String price) {
+		this.id = id;
+		this.title = title;
+		this.startDate = startDate;
+		this.email = email;
+		this.seatType = seatType;
+		this.seatNumber = seatNumber;
+		this.price = price;
+	}
 
-    public Booking toEntity(final User user, final Performance performance, final Seat seat) {
-        return Booking.builder()
-                .user(user)
-                .performance(performance)
-                .seat(seat)
-                .build();
-    }
+	public Booking toEntity(final User user, final Performance performance, final Seat seat) {
+		return Booking.builder()
+			.user(user)
+			.performance(performance)
+			.seat(seat)
+			.build();
+	}
 }
