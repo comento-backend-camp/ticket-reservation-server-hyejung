@@ -29,13 +29,8 @@ public class BookingController {
 	private final PerformanceService performanceService;
 	private final SeatService seatService;
 
-<<<<<<< HEAD
 	private SuccessCode successCode;
 	private BookingResponseCreated bookingResponseCreated;
-=======
-    private SuccessCode successCode;
-    private BookingResponseCreated bookingResponseCreated;
->>>>>>> main
 
 	@Autowired
 	public BookingController(BookingService bookingService, BookingHistoryService bookingHistoryService,
@@ -47,7 +42,6 @@ public class BookingController {
 		this.seatService = seatService;
 	}
 
-<<<<<<< HEAD
 	@PostMapping("")
 	public ResponseEntity<Object> addBooking(@Valid @RequestBody BookingDto reqBooking) {
 		final User user = userService.getUser(reqBooking.getEmail());
@@ -75,32 +69,4 @@ public class BookingController {
 		return ResponseEntity.status(successCode.getHttpStatus())
 			.body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), myBooking));
 	}
-=======
-    @PostMapping("")
-    public ResponseEntity<Object> addBooking(@Valid @RequestBody BookingDto reqBooking){
-        final User user = userService.getUser(reqBooking.getEmail());
-        final Performance performance = performanceService.getPerformance(reqBooking.getId(), reqBooking.getTitle());
-        final Seat seat = seatService.getIsBooking(performance, reqBooking.getSeatType(), reqBooking.getSeatNumber()); //false라면 예약 가능
-
-        if(seat.isBooking()){ //true면 이미 예약된 상태
-            bookingHistoryService.saveBookingFailLog(user, performance, seat);
-            throw new DuplicatedException(ErrorCode.INVALID_SEAT);
-        }else{
-            bookingService.saveBooking(user, performance, seat, reqBooking);
-            bookingHistoryService.saveBookingSucessLog(user, performance, seat);
-            bookingResponseCreated = new BookingResponseCreated(reqBooking.getSeatType(), reqBooking.getSeatNumber());
-            successCode = SuccessCode.CREATED;
-        }
-        return ResponseEntity.status(successCode.getHttpStatus())
-                .body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), bookingResponseCreated));
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Object> showMyBooking(@Valid @PathVariable String email){
-        List<BookingResponse> myBooking = bookingService.getMyBooking(email);
-        successCode = SuccessCode.OK;
-        return ResponseEntity.status(successCode.getHttpStatus())
-                .body(SuccessResponse.res(successCode.getStatus(), successCode.getMessage(), myBooking));
-    }
->>>>>>> main
 }

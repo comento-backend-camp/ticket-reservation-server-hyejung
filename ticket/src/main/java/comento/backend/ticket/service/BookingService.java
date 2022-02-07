@@ -76,7 +76,6 @@ public class BookingService {
 		return bookingRepository.save(booking[0]);
 	}
 
-<<<<<<< HEAD
 	private void updateSeat(final Seat seat, final Performance performance, final BookingDto reqBooking) {
 		SeatDto seatDto = SeatDto.builder()
 			.seatId(seat.getId())
@@ -87,18 +86,6 @@ public class BookingService {
 			.build();
 		seatService.updateSeat(seatDto);
 	}
-=======
-    private void updateSeat(final Seat seat, final Performance performance, final BookingDto reqBooking) {
-        SeatDto seatDto = SeatDto.builder()
-                .seatId(seat.getId())
-                .performance(performance)
-                .seatType(reqBooking.getSeatType())
-                .seatNumber(reqBooking.getSeatNumber())
-                .isBooking(true)
-                .build();
-        seatService.updateSeat(seatDto);
-    }
->>>>>>> main
 
 	@Transactional(readOnly = true)
 	public List<BookingResponse> getMyBooking(String email) {
